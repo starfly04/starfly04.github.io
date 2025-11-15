@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PDF Viewer PWA</title>
+
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#ffffff">
+
+  <!-- iOS üçin -->
+  <link rel="apple-touch-icon" href="icons/icon-192.png">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+</head>
+<body>
+  <h2>PDF Görkeziş</h2>
+
+  <embed src="yourfile.pdf" 
+         type="application/pdf" 
+         width="100%" 
+         height="600px"/>
+
+  <button id="installBtn" hidden>Install App</button>
+
+  <script>
+    // Service worker registrasiýa
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('service-worker.js');
+    }
+
+    // Install Prompt
+    let deferredPrompt;
+    const installBtn = document.getElementById('installBtn');
+
+    window.addEventListener('beforeinstallprompt', (e) => {
+      e.preventDefault();
+      deferredPrompt = e;
+      installBtn.hidden = false;
+    });
+
+    installBtn.addEventListener('click', () => {
+      installBtn.hidden = true;
+      deferredPrompt.prompt();
+      deferredPrompt = null;
+    });
+  </script>
+</body>
+</html>
